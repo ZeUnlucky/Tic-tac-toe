@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +27,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
 
+    // singleton implementation
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
     }
 
+    // team X starts defaultly
     private void Start()
     {
         Instance.CurrentTeam = Team.X;
@@ -43,11 +44,13 @@ public class GameManager : MonoBehaviour
         History = new HistoryManager();
     }
 
+    // gets the space logic from a position
     public SpaceLogic GetLogicFromPosition(Vector2 position)
     {
         return columns[(int)position.x].rows[(int)position.y];
     }
 
+    // executes team turn, adds to history, changes current team, checks for win
     public void DoTeamTurn(SpaceLogic logic, bool addToHistory = true)
     {
         if (IsPlaying)
@@ -76,7 +79,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    // gets logic's position
     private Vector2 GetPositionFromLogic(SpaceLogic logic)
     {
         for (int i = 0; i < 3; i++)
@@ -90,6 +93,7 @@ public class GameManager : MonoBehaviour
         return Vector2.zero;
     }
 
+    //checks for win by checking row, then column, then diagonals
     private bool DidWin(Vector2 pos)
     {
 
@@ -106,11 +110,13 @@ public class GameManager : MonoBehaviour
 
     }
 
+    // checks if the position is a corner or center with math
     private bool IsCornerOrCenter(Vector2 pos)
     {
         return pos.x + pos.y == 2 || pos.x == pos.y;
     }
 
+    // checks  for diagonals
     private bool AreDiagonalsEqual()
     {
         if (columns[1].rows[1].TeamOccupying != Team.None)
